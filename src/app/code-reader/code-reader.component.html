@@ -3,16 +3,16 @@
     <form id="codeReaderForm" (ngSubmit)="manualSubmit()">
       <div class="mb-3">
         <button class="btn btn-primary" (click)="toggleMode()" type="button">
-          {{ isScannerMode ? 'Cambiar a Modo Manual' : 'Cambiar a Modo Scanner' }}
+          {{ is_scanner_mode ? 'Cambiar a Modo Manual' : 'Cambiar a Modo Scanner' }}
         </button>
       </div>
 
-      <div *ngIf="isScannerMode">
+      <div *ngIf="is_scanner_mode">
         <video></video>
       </div>
 
-      <div *ngIf="!isScannerMode">
-        <input type="text" [(ngModel)]="manualCode" class="form-control" placeholder="Escriba el código" name="manualCode" />
+      <div *ngIf="!is_scanner_mode">
+        <input type="text" [(ngModel)]="manual_code" class="form-control" placeholder="Escriba el código" name="manualCode" />
         <button class="btn btn-primary mt-2" type="submit">Agregar</button>
       </div>
     </form>
@@ -21,7 +21,7 @@
     <div class="mt-4">
       <h5>Códigos Detectados:</h5>
       <ul>
-        <li *ngFor="let code of detectedCodes">{{ code }}</li>
+        <li *ngFor="let code of detected_codes">{{ code }}</li>
       </ul>
     </div>
   </div>

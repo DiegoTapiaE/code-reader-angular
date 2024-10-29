@@ -14,7 +14,7 @@ describe('CodeReaderComponent', () => {
     component = fixture.componentInstance;
 
     // Spy para el EventEmitter para evitar el error de método no implementado
-    spyOn(component.onDetect, 'emit');
+    spyOn(component.on_detect, 'emit');
 
     fixture.detectChanges();
   });
@@ -24,8 +24,8 @@ describe('CodeReaderComponent', () => {
   });
 
   it('should emit code on manual submit', () => {
-    component.manualCode = '1234567890';
+    component.manual_code = '1234567890';
     component.manualSubmit();
-    expect(component.onDetect.emit).toHaveBeenCalledWith('1234567890');
+    expect(component.on_detect.emit).toHaveBeenCalledWith('1234567890');
   });
 });
