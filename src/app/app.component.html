@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <h1>Hola, mundo</h1>
-    <app-code-reader></app-code-reader>
+    <h1>Super scanner V2.2</h1>
+    <app-code-reader (onDetect)="myCallback($event)" [cam_debounce]="1500"></app-code-reader>
 </body>
 </html>

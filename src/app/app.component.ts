@@ -10,5 +10,8 @@ import { CodeReaderComponent } from "./code-reader/code-reader.component";
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+  myCallback(detectedCodes: string[]): void {
+    console.log("Códigos detectados:", detectedCodes);
+  }
   title = 'code_reader';
 }

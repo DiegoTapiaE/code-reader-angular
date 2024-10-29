@@ -1,20 +1,28 @@
 <div class="card mt-3">
-    <div class="card-body">
-      <form id="codeReaderForm" (ngSubmit)="manualSubmit()">
-        <div class="mb-3">
-          <button class="btn btn-primary" (click)="toggleMode()" type="button">
-            {{ isScannerMode ? 'Cambiar a Modo Manual' : 'Cambiar a Modo Scanner' }}
-          </button>
-        </div>
-  
-        <div *ngIf="isScannerMode">
-          <video></video>
-        </div>
-  
-        <div *ngIf="!isScannerMode">
-          <input type="text" [(ngModel)]="manualCode" class="form-control" placeholder="Escriba el código" name="manualCode" />
-          <button class="btn btn-primary mt-2" type="submit">Agregar</button>
-        </div>
-      </form>
+  <div class="card-body">
+    <form id="codeReaderForm" (ngSubmit)="manualSubmit()">
+      <div class="mb-3">
+        <button class="btn btn-primary" (click)="toggleMode()" type="button">
+          {{ isScannerMode ? 'Cambiar a Modo Manual' : 'Cambiar a Modo Scanner' }}
+        </button>
+      </div>
+
+      <div *ngIf="isScannerMode">
+        <video></video>
+      </div>
+
+      <div *ngIf="!isScannerMode">
+        <input type="text" [(ngModel)]="manualCode" class="form-control" placeholder="Escriba el código" name="manualCode" />
+        <button class="btn btn-primary mt-2" type="submit">Agregar</button>
+      </div>
+    </form>
+
+    <!-- Lista de códigos detectados -->
+    <div class="mt-4">
+      <h5>Códigos Detectados:</h5>
+      <ul>
+        <li *ngFor="let code of detectedCodes">{{ code }}</li>
+      </ul>
     </div>
   </div>
+</div>
