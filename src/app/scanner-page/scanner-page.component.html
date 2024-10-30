@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
-    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
 </head>
 <body>
-    <h1>Super scanner V2.2</h1>
-    <a routerLink="/scanner">Scanner Page</a>
-    <router-outlet></router-outlet>
-
+    <h1>Scanner PAGE</h1>
+    
+    <app-code-reader (on_detect)="myCallback($event)" [cam_debounce]="1500"></app-code-reader>
 </body>
 </html>
+
+
+
