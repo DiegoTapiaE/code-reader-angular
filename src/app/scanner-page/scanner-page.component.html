@@ -8,8 +8,8 @@
     <h1>Scanner PAGE</h1>
     
     <app-code-reader (on_detect)="myCallback($event)" [cam_debounce]="1500"></app-code-reader>
+
+    <a routerLink="/">BACK</a>
+    <router-outlet></router-outlet>
 </body>
 </html>
-
-
-

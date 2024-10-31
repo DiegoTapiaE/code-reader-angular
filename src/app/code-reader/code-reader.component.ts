@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router, Event, NavigationStart } from '@angular/router';
 declare var BarcodeDetector: any;
 
 @Component({
@@ -10,14 +11,14 @@ declare var BarcodeDetector: any;
   templateUrl: './code-reader.component.html',
   styleUrl: './code-reader.component.css'
 })
-export class CodeReaderComponent implements OnInit {
+export class CodeReaderComponent implements OnInit, OnDestroy {
   @Input() cam_debounce: number = 300; // Si no se define un debounce tomará por defecto 300ms
   @Input() cam_code_type: string | undefined;
-  @Output() on_detect: EventEmitter<any> = new EventEmitter(); 
+  @Output() on_detect: EventEmitter<any> = new EventEmitter();
 
   private barcode_detector: any;
   private last_detection_time: number = 0;
-  public is_scanner_mode: boolean = true; 
+  public is_scanner_mode: boolean = true;
   public manual_code: string = ''; // Código ingresado manualmente
   private last_detected_code: string = ''; // Último código detectado
   public detected_codes: string[] = []; // Lista de códigos detectados acumulados
@@ -29,6 +30,7 @@ export class CodeReaderComponent implements OnInit {
         formats: this.cam_code_type ? [this.cam_code_type] : ['qr_code', 'ean_13', 'code_128']
       });
       this.startCamera();
+
     } else {
       console.error('BarcodeDetector no está soportado en este navegador.');
     }
@@ -49,6 +51,11 @@ export class CodeReaderComponent implements OnInit {
     navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
       .then((stream) => {
         const video = document.querySelector('video') as HTMLVideoElement;
+
+        if (video == null) {
+          return;
+        }
+
         video.srcObject = stream;
         video.play();
 
@@ -75,10 +82,20 @@ export class CodeReaderComponent implements OnInit {
   // Detiene la cámara y libera los recursos de video
   stopCamera(): void {
     const video = document.querySelector('video') as HTMLVideoElement;
+    if (video == null) {
+      return;
+    }
+
     const stream = video.srcObject as MediaStream;
     if (stream) {
       stream.getTracks().forEach(track => track.stop());
+      video.srcObject = null;
     }
+  }
+
+  ngOnDestroy(): void {
+    // Detener la cámara cuando el componente se destruye
+    this.stopCamera();
   }
 
   // Escanea el video para detectar códigos de barras en intervalos definidos
@@ -108,6 +125,14 @@ export class CodeReaderComponent implements OnInit {
 
                   // Agregar el código detectado a la lista de códigos
                   this.detected_codes.push(detected_code);
+
+                  if ('vibrate' in navigator) {
+                    navigator.vibrate(200); // Vibrar por 200 ms
+                  }
+                  else {
+                    console.error('NO EXISTE EL VIBRATEEEE')
+                  }
+
                 }
               }
             })
@@ -126,5 +151,14 @@ export class CodeReaderComponent implements OnInit {
       this.detected_codes.push(this.manual_code); // Agregar el código manual a la lista de códigos detectados
       this.manual_code = ''; // Limpiar el campo de entrada
     }
+  }
+
+  constructor(private router: Router) {
+    // Detectar inicio de navegación para apagar la cámara
+    this.router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationStart) {
+        this.stopCamera();
+      }
+    });
   }
 }
